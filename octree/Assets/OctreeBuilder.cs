@@ -73,106 +73,55 @@ public class Node
         }
     }
 
-    public void DrawWireCube()
+    public void GetLinePositions(OctreeBuilder builder)
     {
-        Gizmos.DrawWireCube(pos, new Vector3(size, size, size));
-        foreach (Node n in children) n.DrawWireCube();
+        float x = pos.x - size / 2f;
+        float y = pos.y - size / 2f;
+        float z = pos.z - size / 2f;
+        Vector2 xy = new Vector2(x, y);
+        RangeSet set;
+        builder.xy.TryGetValue(xy, out set);
+        if (set == null)
+        {
+            set = new RangeSet();
+            builder.xy.Add(xy, set);
+        }
+        set.AddRange(new Vector2(z, z + size));
+        foreach (Node c in children) c.GetLinePositions(builder);
     }
 }
 
 public class OctreeBuilder : MonoBehaviour
 {
-    //these two lists are used for keeping track of objects in certain depths and whether they have collisions or not
-    public static List<GameObject>[] noCollisions;
-    public static List<GameObject>[] collisions;
     public float size = 1024;
     public Vector2Int displayRange;
     public GameObject prefab;
     public int maxDepth;
     public bool showCollisionsOnly;
     Node root;
-
-    Queue<GameObject> pool = new Queue<GameObject>();
-    Queue<GameObject> used = new Queue<GameObject>();
+    public Dictionary<Vector2, RangeSet> xy, xz, yz;
 
     private void Start()
     {
         GenerateBoard();
+        xy = new Dictionary<Vector2, RangeSet>();
+        xz = new Dictionary<Vector2, RangeSet>();
+        yz = new Dictionary<Vector2, RangeSet>();
+        root.GetLinePositions(this);
+        int count = 0;
+        foreach (RangeSet r in xy.Values)
+        {
+            foreach (Vector2 v in r.ranges)
+            {
+                count++;
+                Debug.Log(v);
+            }
+        }
+        Debug.Log(count);
     }
 
     void GenerateBoard()
     {
         root = new Node(size, Vector3.zero, maxDepth);
-        SetupObjectLists();
-        RecycleVisuals();
-        BuildOctreeVisuals(root);
-        UpdateVisualActiveState();
-    }
-
-    void SetupObjectLists()
-    {
-        noCollisions = new List<GameObject>[maxDepth];
-        for (int i = 0; i < maxDepth; ++i)
-        {
-            noCollisions[i] = new List<GameObject>();
-        }
-        collisions = new List<GameObject>[maxDepth];
-        for (int i = 0; i < maxDepth; ++i)
-        {
-            collisions[i] = new List<GameObject>();
-        }
-    }
-
-    void UpdateVisualActiveState()
-    {
-        for (int i = 0; i < maxDepth; ++i)
-        {
-            if (i < displayRange.x-1 || i > displayRange.y-1)
-            {
-                foreach (GameObject o in collisions[i]) o.SetActive(false);
-                if (!showCollisionsOnly) foreach (GameObject o in noCollisions[i]) o.SetActive(false);
-            }
-            else
-            {
-                foreach (GameObject o in collisions[i]) o.SetActive(true);
-                if (!showCollisionsOnly) foreach (GameObject o in noCollisions[i]) o.SetActive(true);
-            }
-        }
-    }
-
-    void RecycleVisuals()
-    {
-        while (used.Count > 0)
-        {
-            GameObject obj = used.Dequeue();
-            pool.Enqueue(obj);
-            obj.SetActive(false);
-        }
-    }
-
-    void BuildOctreeVisuals(Node n)
-    {
-        GameObject obj = GetGameObject();
-        obj.transform.localScale = new Vector3(n.size, n.size, n.size);
-        obj.transform.position = n.pos;
-        if (n.collision) collisions[n.depth].Add(obj);
-        else noCollisions[n.depth].Add(obj);
-        foreach (Node c in n.children) BuildOctreeVisuals(c);
-    }
-
-    GameObject GetGameObject()
-    {
-        if (pool.Count == 0) pool.Enqueue(Instantiate(prefab));
-        GameObject obj = pool.Dequeue();
-        used.Enqueue(obj);
-        return obj;     
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (Application.isPlaying)
-        {
-            root.DrawWireCube();
-        }
     }
 }
