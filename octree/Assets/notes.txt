@@ -1,0 +1,25 @@
+== pathfinding and such ==
+Physics.CheckBox to find collisions in octree
+
+Just make the octree first
+
+Functions needed:
+ - Remove child nodes if none are occupied (do this when an object is destroyed/removed)
+
+when making octree node:
+ - Get overlap in 8 boxes to see if a split is needed
+ - if so, split and keep going
+ - if not, you have the node
+
+Finding object's current occupied nodes
+ - List of nodes
+ - Do CheckBox with layer set aside for checking this
+ - Save old layer, set layer, do check, reset layer
+
+Finding Node a point is in
+
+== gameplay ==
+
+
+== optimizing visuals ==
+lines needed: 3 dictionaries, with keys of xy, xz, and yz corresponding to where the line is, and the values are ranges that the line needs to occupy
