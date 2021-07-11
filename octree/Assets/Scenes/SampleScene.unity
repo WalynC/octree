@@ -617,10 +617,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 8192
-  displayRange: {x: 12, y: 12}
-  prefab: {fileID: 534897662876034013, guid: 7c5230625c7246f46b3732e0fecc85a2, type: 3}
+  displayRange: {x: 0, y: 10}
   maxDepth: 11
-  showCollisionsOnly: 1
+  showCollisionsOnly: 0
+  line: {fileID: 0}
 --- !u!4 &1612503650
 Transform:
   m_ObjectHideFlags: 0
