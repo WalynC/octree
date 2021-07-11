@@ -144,7 +144,7 @@ public class OctreeBuilder : MonoBehaviour
 
     private void Start()
     {
-        GenerateBoard();
+        GenerateOctree();
         BuildVisuals();
     }
 
@@ -176,7 +176,7 @@ public class OctreeBuilder : MonoBehaviour
         }
     }
 
-    void GenerateBoard()
+    void GenerateOctree()
     {
         root = new Node(size, Vector3.zero, maxDepth);
     }
