@@ -113,7 +113,7 @@ public class OctreeBuilder : MonoBehaviour
     public float size = 1024;
     public Vector2Int displayRange;
     public int maxDepth;
-    public bool showCollisionsOnly;
+    public bool showCols, showNonCols;
     Node root;
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
 
@@ -199,7 +199,7 @@ public class OctreeBuilder : MonoBehaviour
             List<Node> newSearch = new List<Node>();
             foreach (Node n in toSearch)
             {
-                if (n.depth >= displayRange.x && n.depth <= displayRange.y && (!showCollisionsOnly || n.collision))
+                if (n.depth >= displayRange.x && n.depth <= displayRange.y && ((showCols && n.collision) || (showNonCols && !n.collision)))
                 {
                     n.AddLinesToRange(this);
                 }
