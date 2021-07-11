@@ -182,6 +182,12 @@ public class OctreeBuilder : MonoBehaviour
 
     void BuildVisuals()
     {
+        while (used.Count > 0)
+        {
+            GameObject o = used.Dequeue();
+            pool.Enqueue(o);
+            o.SetActive(false);
+        }
         xy = new Dictionary<Vector2, RangeSet>();
         xz = new Dictionary<Vector2, RangeSet>();
         yz = new Dictionary<Vector2, RangeSet>();
