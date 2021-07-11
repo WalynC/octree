@@ -119,10 +119,10 @@ public class OctreeBuilder : MonoBehaviour
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
 
     public GameObject line;
-    Queue<GameObject> linePool = new Queue<GameObject>();
-    Queue<GameObject> linesInUse = new Queue<GameObject>();
+    Queue<GameObject> pool = new Queue<GameObject>();
+    Queue<GameObject> used = new Queue<GameObject>();
 
-    public List<GameObject>[] colliding;
+    public List<GameObject>[] collisions, noCollisions;
 
     public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
     {
@@ -134,6 +134,20 @@ public class OctreeBuilder : MonoBehaviour
             dict.Add(pos, set);
         }
         set.AddRange(range);
+    }
+
+    void SetupObjectLists()
+    {
+        noCollisions = new List<GameObject>[maxDepth];
+        for (int i = 0; i < maxDepth; ++i)
+        {
+            noCollisions[i] = new List<GameObject>();
+        }
+        collisions = new List<GameObject>[maxDepth];
+        for (int i = 0; i < maxDepth; ++i)
+        {
+            collisions[i] = new List<GameObject>();
+        }
     }
 
     private void Start()
@@ -188,3 +202,69 @@ public class OctreeBuilder : MonoBehaviour
         root = new Node(size, Vector3.zero, maxDepth);
     }
 }
+
+/*
+ * 
+    Queue<GameObject> pool = new Queue<GameObject>();
+ 
+    Queue<GameObject> used = new Queue<GameObject>();
+
+
+    void BuildOctreeVisuals(Node n)
+    {
+
+        GameObject obj = GetGameObject();
+
+        obj.transform.localScale = new Vector3(n.size, n.size, n.size);
+        	obj.transform.position = n.pos;
+
+        if (n.collision) collisions[n.depth].Add(obj);
+
+        else noCollisions[n.depth].Add(obj);
+
+        foreach (Node c in n.children) BuildOctreeVisuals(c);
+
+    }
+
+
+    GameObject GetGameObject()
+    {
+
+        if (pool.Count == 0) pool.Enqueue(Instantiate(prefab));
+
+        GameObject obj = pool.Dequeue();
+
+        used.Enqueue(obj);
+
+        return obj;
+    }
+
+
+    void UpdateVisualActiveState()
+    {
+
+        for (int i = 0; i < maxDepth; ++i)
+        {
+
+            if (i < displayRange.x-1 || i > displayRange.y-1)
+            {
+
+                foreach (GameObject o in collisions[i]) o.SetActive(false);
+
+                if (!showCollisionsOnly) foreach (GameObject o in noCollisions[i]) o.SetActive(false);
+
+            }
+
+            else
+            {
+
+                foreach (GameObject o in collisions[i]) o.SetActive(true);
+
+                if (!showCollisionsOnly) foreach (GameObject o in noCollisions[i]) o.SetActive(true);
+
+            }
+
+        }
+
+    }
+ */
