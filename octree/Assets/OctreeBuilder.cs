@@ -210,6 +210,33 @@ public class OctreeBuilder : MonoBehaviour
             }
             toSearch = newSearch;
         }
+        foreach (KeyValuePair<Vector2, RangeSet> kv in xy)
+        {
+            foreach (Vector2 v in kv.Value.ranges)
+            {
+                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                rend.SetPosition(0, new Vector3(kv.Key.x, kv.Key.y, v.x));
+                rend.SetPosition(1, new Vector3(kv.Key.x, kv.Key.y, v.y));
+            }
+        }
+        foreach (KeyValuePair<Vector2, RangeSet> kv in xz)
+        {
+            foreach (Vector2 v in kv.Value.ranges)
+            {
+                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                rend.SetPosition(0, new Vector3(kv.Key.x, v.x, kv.Key.y));
+                rend.SetPosition(1, new Vector3(kv.Key.x, v.y, kv.Key.y));
+            }
+        }
+        foreach (KeyValuePair<Vector2, RangeSet> kv in yz)
+        {
+            foreach (Vector2 v in kv.Value.ranges)
+            {
+                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                rend.SetPosition(0, new Vector3(v.x, kv.Key.x, kv.Key.y));
+                rend.SetPosition(1, new Vector3(v.y, kv.Key.x, kv.Key.y));
+            }
+        }
     }
 }
 
