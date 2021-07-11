@@ -145,16 +145,6 @@ public class OctreeBuilder : MonoBehaviour
     {
         GenerateBoard();
         BuildVisuals();
-        int count = 0;
-        foreach (RangeSet r in xy.Values)
-        {
-            foreach (Vector2 v in r.ranges)
-            {
-                count++;
-                Debug.Log(v);
-            }
-        }
-        Debug.Log(count);
     }
 
     private void OnDrawGizmosSelected()
