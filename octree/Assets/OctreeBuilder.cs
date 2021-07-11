@@ -118,8 +118,8 @@ public class OctreeBuilder : MonoBehaviour
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
 
     public GameObject line;
-    Queue<GameObject> pool = new Queue<GameObject>();
-    Queue<GameObject> used = new Queue<GameObject>();
+    Queue<LineRenderer> pool = new Queue<LineRenderer>();
+    Queue<LineRenderer> used = new Queue<LineRenderer>();
 
     public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
     {
@@ -133,10 +133,11 @@ public class OctreeBuilder : MonoBehaviour
         set.AddRange(range);
     }
 
-    GameObject GetGameObject()
+    LineRenderer GetLineRenderer()
     {
-        if (pool.Count == 0) pool.Enqueue(Instantiate(line));
-        GameObject obj = pool.Dequeue();
+        if (pool.Count == 0) pool.Enqueue(Instantiate(line).GetComponent<LineRenderer>());
+        LineRenderer obj = pool.Dequeue();
+        obj.gameObject.SetActive(true);
         used.Enqueue(obj);
         return obj;
     }
@@ -184,9 +185,9 @@ public class OctreeBuilder : MonoBehaviour
     {
         while (used.Count > 0)
         {
-            GameObject o = used.Dequeue();
+            LineRenderer o = used.Dequeue();
             pool.Enqueue(o);
-            o.SetActive(false);
+            o.gameObject.SetActive(false);
         }
         xy = new Dictionary<Vector2, RangeSet>();
         xz = new Dictionary<Vector2, RangeSet>();
@@ -210,7 +211,7 @@ public class OctreeBuilder : MonoBehaviour
         {
             foreach (Vector2 v in kv.Value.ranges)
             {
-                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(kv.Key.x, kv.Key.y, v.x));
                 rend.SetPosition(1, new Vector3(kv.Key.x, kv.Key.y, v.y));
             }
@@ -219,7 +220,7 @@ public class OctreeBuilder : MonoBehaviour
         {
             foreach (Vector2 v in kv.Value.ranges)
             {
-                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(kv.Key.x, v.x, kv.Key.y));
                 rend.SetPosition(1, new Vector3(kv.Key.x, v.y, kv.Key.y));
             }
@@ -228,7 +229,7 @@ public class OctreeBuilder : MonoBehaviour
         {
             foreach (Vector2 v in kv.Value.ranges)
             {
-                LineRenderer rend = GetGameObject().GetComponent<LineRenderer>();
+                LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(v.x, kv.Key.x, kv.Key.y));
                 rend.SetPosition(1, new Vector3(v.y, kv.Key.x, kv.Key.y));
             }
