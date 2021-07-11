@@ -112,7 +112,6 @@ public class OctreeBuilder : MonoBehaviour
 {
     public float size = 1024;
     public Vector2Int displayRange;
-    public GameObject prefab;
     public int maxDepth;
     public bool showCollisionsOnly;
     Node root;
@@ -121,8 +120,6 @@ public class OctreeBuilder : MonoBehaviour
     public GameObject line;
     Queue<GameObject> pool = new Queue<GameObject>();
     Queue<GameObject> used = new Queue<GameObject>();
-
-    public List<GameObject>[] collisions, noCollisions;
 
     public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
     {
@@ -136,27 +133,18 @@ public class OctreeBuilder : MonoBehaviour
         set.AddRange(range);
     }
 
-    void SetupObjectLists()
+    GameObject GetGameObject()
     {
-        noCollisions = new List<GameObject>[maxDepth];
-        for (int i = 0; i < maxDepth; ++i)
-        {
-            noCollisions[i] = new List<GameObject>();
-        }
-        collisions = new List<GameObject>[maxDepth];
-        for (int i = 0; i < maxDepth; ++i)
-        {
-            collisions[i] = new List<GameObject>();
-        }
+        if (pool.Count == 0) pool.Enqueue(Instantiate(line));
+        GameObject obj = pool.Dequeue();
+        used.Enqueue(obj);
+        return obj;
     }
 
     private void Start()
     {
         GenerateBoard();
-        xy = new Dictionary<Vector2, RangeSet>();
-        xz = new Dictionary<Vector2, RangeSet>();
-        yz = new Dictionary<Vector2, RangeSet>();
-        root.AddLinesToRange(this);
+        BuildVisuals();
         int count = 0;
         foreach (RangeSet r in xy.Values)
         {
@@ -201,6 +189,28 @@ public class OctreeBuilder : MonoBehaviour
     {
         root = new Node(size, Vector3.zero, maxDepth);
     }
+
+    void BuildVisuals()
+    {
+        xy = new Dictionary<Vector2, RangeSet>();
+        xz = new Dictionary<Vector2, RangeSet>();
+        yz = new Dictionary<Vector2, RangeSet>();
+        List<Node> toSearch = new List<Node>();
+        toSearch.Add(root);
+        while (toSearch.Count > 0)
+        {
+            List<Node> newSearch = new List<Node>();
+            foreach (Node n in toSearch)
+            {
+                if (n.depth >= displayRange.x && n.depth <= displayRange.y && (!showCollisionsOnly || n.collision))
+                {
+                    n.AddLinesToRange(this);
+                }
+                foreach (Node c in n.children) newSearch.Add(c);
+            }
+            toSearch = newSearch;
+        }
+    }
 }
 
 /*
@@ -212,18 +222,12 @@ public class OctreeBuilder : MonoBehaviour
 
     void BuildOctreeVisuals(Node n)
     {
-
         GameObject obj = GetGameObject();
-
         obj.transform.localScale = new Vector3(n.size, n.size, n.size);
-        	obj.transform.position = n.pos;
-
+      	obj.transform.position = n.pos;
         if (n.collision) collisions[n.depth].Add(obj);
-
         else noCollisions[n.depth].Add(obj);
-
         foreach (Node c in n.children) BuildOctreeVisuals(c);
-
     }
 
 
