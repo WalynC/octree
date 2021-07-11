@@ -73,21 +73,38 @@ public class Node
         }
     }
 
-    public void GetLinePositions(OctreeBuilder builder)
+    public void AddLinesToRange(OctreeBuilder builder)
     {
         float x = pos.x - size / 2f;
         float y = pos.y - size / 2f;
         float z = pos.z - size / 2f;
-        Vector2 xy = new Vector2(x, y);
-        RangeSet set;
-        builder.xy.TryGetValue(xy, out set);
-        if (set == null)
-        {
-            set = new RangeSet();
-            builder.xy.Add(xy, set);
-        }
-        set.AddRange(new Vector2(z, z + size));
-        foreach (Node c in children) c.GetLinePositions(builder);
+        Vector2 linePos = new Vector2(x, y);
+        Vector2 range = new Vector2(z, z + size);
+        OctreeBuilder.AddToRange(builder.xy, linePos, range);
+        linePos.x += size;
+        OctreeBuilder.AddToRange(builder.xy, linePos, range);
+        linePos.y += size;
+        OctreeBuilder.AddToRange(builder.xy, linePos, range);
+        linePos.x -= size;
+        OctreeBuilder.AddToRange(builder.xy, linePos, range);
+        linePos = new Vector2(x, z);
+        range = new Vector2(y, y + size);
+        OctreeBuilder.AddToRange(builder.xz, linePos, range);
+        linePos.x += size;
+        OctreeBuilder.AddToRange(builder.xz, linePos, range);
+        linePos.y += size;
+        OctreeBuilder.AddToRange(builder.xz, linePos, range);
+        linePos.x -= size;
+        OctreeBuilder.AddToRange(builder.xz, linePos, range);
+        linePos = new Vector2(y, z);
+        range = new Vector2(x, x + size);
+        OctreeBuilder.AddToRange(builder.yz, linePos, range);
+        linePos.x += size;
+        OctreeBuilder.AddToRange(builder.yz, linePos, range);
+        linePos.y += size;
+        OctreeBuilder.AddToRange(builder.yz, linePos, range);
+        linePos.x -= size;
+        OctreeBuilder.AddToRange(builder.yz, linePos, range);
     }
 }
 
@@ -101,13 +118,31 @@ public class OctreeBuilder : MonoBehaviour
     Node root;
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
 
+    public GameObject line;
+    Queue<GameObject> linePool = new Queue<GameObject>();
+    Queue<GameObject> linesInUse = new Queue<GameObject>();
+
+    public List<GameObject>[] colliding;
+
+    public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
+    {
+        RangeSet set;
+        dict.TryGetValue(pos, out set);
+        if (set == null)
+        {
+            set = new RangeSet();
+            dict.Add(pos, set);
+        }
+        set.AddRange(range);
+    }
+
     private void Start()
     {
         GenerateBoard();
         xy = new Dictionary<Vector2, RangeSet>();
         xz = new Dictionary<Vector2, RangeSet>();
         yz = new Dictionary<Vector2, RangeSet>();
-        root.GetLinePositions(this);
+        root.AddLinesToRange(this);
         int count = 0;
         foreach (RangeSet r in xy.Values)
         {
@@ -118,6 +153,34 @@ public class OctreeBuilder : MonoBehaviour
             }
         }
         Debug.Log(count);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (Application.isPlaying)
+        {
+            foreach (KeyValuePair<Vector2, RangeSet> kv in xy)
+            {
+                foreach (Vector2 v in kv.Value.ranges)
+                {
+                    Gizmos.DrawLine(new Vector3(kv.Key.x, kv.Key.y, v.x), new Vector3(kv.Key.x, kv.Key.y, v.y));
+                }
+            }
+            foreach (KeyValuePair<Vector2, RangeSet> kv in xz)
+            {
+                foreach (Vector2 v in kv.Value.ranges)
+                {
+                    Gizmos.DrawLine(new Vector3(kv.Key.x, v.x, kv.Key.y), new Vector3(kv.Key.x, v.y, kv.Key.y));
+                }
+            }
+            foreach (KeyValuePair<Vector2, RangeSet> kv in yz)
+            {
+                foreach (Vector2 v in kv.Value.ranges)
+                {
+                    Gizmos.DrawLine(new Vector3(v.x, kv.Key.x, kv.Key.y), new Vector3(v.y, kv.Key.x, kv.Key.y));
+                }
+            }
+        }
     }
 
     void GenerateBoard()
