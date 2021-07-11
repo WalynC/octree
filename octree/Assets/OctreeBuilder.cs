@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Diagnostics;
 
 public class RangeSet
 {
@@ -116,6 +116,7 @@ public class OctreeBuilder : MonoBehaviour
     public bool showCols, showNonCols;
     Node root;
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
+    public float lastOctreeTime, lastLineTime;
 
     public GameObject line;
     Queue<LineRenderer> pool = new Queue<LineRenderer>();
@@ -178,11 +179,17 @@ public class OctreeBuilder : MonoBehaviour
 
     void GenerateOctree()
     {
+        Stopwatch st = new Stopwatch();
+        st.Start();
         root = new Node(size, Vector3.zero, maxDepth);
+        st.Stop();
+        lastOctreeTime = st.ElapsedMilliseconds;
     }
 
     void BuildVisuals()
     {
+        Stopwatch st = new Stopwatch();
+        st.Start();
         while (used.Count > 0)
         {
             LineRenderer o = used.Dequeue();
@@ -234,6 +241,8 @@ public class OctreeBuilder : MonoBehaviour
                 rend.SetPosition(1, new Vector3(v.y, kv.Key.x, kv.Key.y));
             }
         }
+        st.Stop();
+        lastLineTime = st.ElapsedMilliseconds;
     }
 }
 
