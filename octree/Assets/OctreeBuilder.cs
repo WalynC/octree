@@ -204,9 +204,10 @@ public class OctreeBuilder : MonoBehaviour
         while (toSearch.Count > 0)
         {
             List<Node> newSearch = new List<Node>();
+            if (toSearch[0].depth > displayRange.y) break; //Leave loop once we're no longer going to get any more visible ndoes
             foreach (Node n in toSearch)
             {
-                if (n.depth >= displayRange.x && n.depth <= displayRange.y && ((showCols && n.collision) || (showNonCols && !n.collision)))
+                if (n.depth >= displayRange.x && ((showCols && n.collision) || (showNonCols && !n.collision)))
                 {
                     n.AddLinesToRange(this);
                 }
