@@ -145,6 +145,11 @@ public class OctreeBuilder : MonoBehaviour
 
     private void Start()
     {
+        Generate();
+    }
+
+    public void Generate()
+    {
         LevelGenerator.instance.Generate();
         GenerateOctree();
         BuildVisuals();
