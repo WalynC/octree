@@ -11,7 +11,7 @@ public class ToggleVisibility : MonoBehaviour
 
     private void Start()
     {
-        toggle.isOn = (cols? build.showCols : build.showNonCols);
+        toggle.SetIsOnWithoutNotify(cols? build.showCols : build.showNonCols);
     }
 
     public void Toggle(bool toggle)
