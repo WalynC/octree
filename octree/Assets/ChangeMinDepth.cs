@@ -12,4 +12,17 @@ public class ChangeMinDepth : MonoBehaviour
     {
         field.text = build.displayRange.x.ToString();
     }
+
+    public void Change(bool increase)
+    {
+        build.displayRange.x+= (increase? 1 : -1);
+        field.text = build.displayRange.x.ToString();
+        build.BuildVisuals();
+    }
+
+    public void Set(string str)
+    {
+        build.displayRange.x = int.Parse(str);
+        build.BuildVisuals();
+    }
 }

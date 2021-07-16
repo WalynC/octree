@@ -164,7 +164,7 @@ public class OctreeBuilder : MonoBehaviour
         lastOctreeTime = st.ElapsedMilliseconds;
     }
 
-    void BuildVisuals()
+    public void BuildVisuals()
     {
         Stopwatch st = new Stopwatch();
         st.Start();
