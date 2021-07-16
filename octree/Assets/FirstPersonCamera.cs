@@ -39,6 +39,7 @@ public class FirstPersonCamera : MonoBehaviour
             float scale = Mathf.Clamp(disp / maxSDisp, 0, 1);
             eul = new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(transform.forward - transform.up * pos.x - transform.right * pos.y, transform.up), sens * scale * Time.deltaTime);
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0);
         }
     }
 }
