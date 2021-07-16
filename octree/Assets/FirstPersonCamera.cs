@@ -7,9 +7,6 @@ public class FirstPersonCamera : MonoBehaviour
     public static FirstPersonCamera instance;
     public Vector3 eul;
     public Transform tgt;
-    public static Vector3 lookAtPoint = Vector3.zero;
-    public static GameObject lookAtObject = null;
-    public LayerMask lookAtMask;
 
     public float sens = 5f; //sensitivity
     public Vector3 offset;
@@ -41,16 +38,5 @@ public class FirstPersonCamera : MonoBehaviour
         float scale = Mathf.Clamp(disp / maxSDisp, 0, 1);
         eul = new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(transform.forward - transform.up * pos.x - transform.right * pos.y, transform.up), sens * scale * Time.deltaTime);
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, lookAtMask))
-        {
-            lookAtPoint = hit.point;
-            lookAtObject = hit.collider.gameObject;
-        }
-        else
-        {
-            lookAtPoint = transform.position + transform.forward * 9999f;
-            lookAtObject = null;
-        }
     }
 }
