@@ -585,6 +585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 511042577}
   - component: {fileID: 511042578}
+  - component: {fileID: 511042579}
   m_Layer: 5
   m_Name: Collisions
   m_TagString: Untagged
@@ -660,8 +661,35 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511042579}
+        m_TargetAssemblyTypeName: ToggleVisibility, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &511042579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511042576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013a843337d50df4389c96a3376fae7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  build: {fileID: 1612503649}
+  toggle: {fileID: 511042578}
+  cols: 1
 --- !u!1 &575271389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 775783812}
   - component: {fileID: 775783813}
+  - component: {fileID: 775783814}
   m_Layer: 5
   m_Name: NonCollisions
   m_TagString: Untagged
@@ -1584,8 +1613,35 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 775783814}
+        m_TargetAssemblyTypeName: ToggleVisibility, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &775783814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775783811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013a843337d50df4389c96a3376fae7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  build: {fileID: 1612503649}
+  toggle: {fileID: 775783813}
+  cols: 0
 --- !u!1 &816599346
 GameObject:
   m_ObjectHideFlags: 0
@@ -2365,10 +2421,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 19.35
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
