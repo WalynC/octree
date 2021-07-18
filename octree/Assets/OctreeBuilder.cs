@@ -46,9 +46,9 @@ public class Node
     static Vector3[] directions = { new Vector3(1, 1, 1), new Vector3(1, 1, -1), new Vector3(1, -1, 1), new Vector3(1, -1, -1),
                                     new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1)}; //direction child nodes should be in relative to position of parent node
     /*
-     * up/down 
-     * north/south
-     * east/west
+     * x:up/down 
+     * y:north/south
+     * z:east/west
      */
     public Node[] children = new Node[0];
     public Node parent = null;
