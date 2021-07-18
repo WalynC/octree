@@ -74,8 +74,9 @@ public class Node
         }
     }
 
-    public void AddLinesToRange(OctreeBuilder builder)
+    public void AddLinesToRange()
     {
+        OctreeBuilder builder = OctreeBuilder.instance;
         float x = pos.x - size / 2f;
         float y = pos.y - size / 2f;
         float z = pos.z - size / 2f;
@@ -192,7 +193,7 @@ public class OctreeBuilder : MonoBehaviour
             {
                 if (n.depth >= displayRange.x && ((showCols && n.collision) || (showNonCols && !n.collision)))
                 {
-                    n.AddLinesToRange(this);
+                    n.AddLinesToRange();
                 }
                 foreach (Node c in n.children) newSearch.Add(c);
             }
