@@ -5,7 +5,6 @@ using TMPro;
 
 public class NodeCounter : MonoBehaviour
 {
-    public OctreeBuilder build;
     public TextMeshProUGUI text;
     void Update()
     {

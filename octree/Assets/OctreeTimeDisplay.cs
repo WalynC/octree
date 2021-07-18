@@ -5,10 +5,9 @@ using TMPro;
 
 public class OctreeTimeDisplay : MonoBehaviour
 {
-    public OctreeBuilder build;
     public TextMeshProUGUI text;
     void Update()
     {
-        text.text = "Octree: " + build.lastOctreeTime + " ms";
+        text.text = "Octree: " + OctreeBuilder.instance.lastOctreeTime + " ms";
     }
 }

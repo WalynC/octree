@@ -5,10 +5,9 @@ using TMPro;
 
 public class LineTimeDisplay : MonoBehaviour
 {
-    public OctreeBuilder build;
     public TextMeshProUGUI text;
     void Update()
     {
-        text.text = "Line: " + build.lastLineTime + " ms";
+        text.text = "Line: " + OctreeBuilder.instance.lastLineTime + " ms";
     }
 }

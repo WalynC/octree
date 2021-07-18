@@ -6,11 +6,12 @@ using TMPro;
 public class ChangeDepth : MonoBehaviour
 {
     public TMP_InputField field;
-    public OctreeBuilder build;
+    OctreeBuilder build;
     public bool max = false;
 
     private void Start()
     {
+        build = OctreeBuilder.instance;
         field.text = (max ? build.displayRange.y : build.displayRange.x).ToString();
     }
 
