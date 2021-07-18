@@ -62,6 +62,7 @@ public class Node
         this.pos = pos;
         this.size = size;
         depth = parent != null ? parent.depth + 1 : 0;
+        OctreeBuilder.instance.nodeCount[depth]++;
         collision = Physics.CheckBox(pos, new Vector3(size, size, size) / 2f);
         if (depth < maxDepth-1 && collision) //if we're not at max depth and we have a collision, child nodes are needed
         {
@@ -110,6 +111,7 @@ public class Node
 
 public class OctreeBuilder : MonoBehaviour
 {
+    public static OctreeBuilder instance;
     public float size = 1024;
     public Vector2Int displayRange;
     public int maxDepth;
@@ -117,6 +119,7 @@ public class OctreeBuilder : MonoBehaviour
     Node root;
     public Dictionary<Vector2, RangeSet> xy, xz, yz;
     public float lastOctreeTime, lastLineTime;
+    public int[] nodeCount;
 
     public GameObject line;
     Queue<LineRenderer> pool = new Queue<LineRenderer>();
@@ -145,11 +148,13 @@ public class OctreeBuilder : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
         Generate();
     }
 
     public void Generate()
     {
+        nodeCount = new int[maxDepth];
         LevelGenerator.instance.Generate();
         GenerateOctree();
         BuildVisuals();
