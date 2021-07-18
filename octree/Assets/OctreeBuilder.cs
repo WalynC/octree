@@ -155,10 +155,14 @@ public class OctreeBuilder : MonoBehaviour
         lastOctreeTime = st.ElapsedMilliseconds;
     }
 
-    public void BuildVisuals()
+    public void Clear()
     {
-        Stopwatch st = new Stopwatch();
-        st.Start();
+        root = null;
+        ClearVisuals();
+    }
+
+    void ClearVisuals()
+    {
         while (used.Count > 0)
         {
             LineRenderer o = used.Dequeue();
@@ -168,6 +172,13 @@ public class OctreeBuilder : MonoBehaviour
         xy = new Dictionary<Vector2, RangeSet>();
         xz = new Dictionary<Vector2, RangeSet>();
         yz = new Dictionary<Vector2, RangeSet>();
+    }
+
+    public void BuildVisuals()
+    {
+        Stopwatch st = new Stopwatch();
+        st.Start();
+        ClearVisuals();
         List<Node> toSearch = new List<Node>();
         toSearch.Add(root);
         while (toSearch.Count > 0)
