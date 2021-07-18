@@ -606,7 +606,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eul: {x: 0, y: 0, z: 0}
-  tgt: {fileID: 0}
   sens: 75
   offset: {x: 0, y: 0, z: 0}
 --- !u!4 &470925548
@@ -1153,7 +1152,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Clear
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4468,7 +4467,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1612503649}
         m_TargetAssemblyTypeName: OctreeBuilder, Assembly-CSharp
-        m_MethodName: Generate
+        m_MethodName: Clear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1715157174}
+        m_TargetAssemblyTypeName: LevelGenerator, Assembly-CSharp
+        m_MethodName: UnloadAllObjects
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
