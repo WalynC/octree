@@ -30,6 +30,11 @@ public class LevelGenerator : MonoBehaviour
         return o;
     }
 
+    public void UnloadAllObjects()
+    {
+        for (int i = 0; i < objects.Length; ++i) UnloadObjects(i);
+    }
+
     public void UnloadObjects(int i)
     {
         while (used[i].Count > 0)
@@ -42,10 +47,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void Generate()
     {
-        for (int i = 0; i < objects.Length; ++i)
-        {
-            UnloadObjects(i);
-        }
+        UnloadAllObjects();
         for (int i = 0; i < count; ++i)
         {
             GameObject o = GetGameObject(Random.Range(0, objects.Length));
