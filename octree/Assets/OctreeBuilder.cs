@@ -120,7 +120,7 @@ public class OctreeBuilder : MonoBehaviour
 
     public GameObject line;
     Queue<LineRenderer> pool = new Queue<LineRenderer>();
-    Queue<LineRenderer> used = new Queue<LineRenderer>();
+    public Queue<LineRenderer> used = new Queue<LineRenderer>();
 
     public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
     {
