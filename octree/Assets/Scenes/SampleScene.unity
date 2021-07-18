@@ -735,7 +735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013a843337d50df4389c96a3376fae7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   toggle: {fileID: 511042578}
   cols: 1
 --- !u!1 &573657347
@@ -788,7 +787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65062f99ea49524cb4c92d58e31fbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   text: {fileID: 573657350}
 --- !u!114 &573657350
 MonoBehaviour:
@@ -1591,7 +1589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e52f9b5a3cd1b4d880cf4a059e6420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   text: {fileID: 759368559}
 --- !u!1 &766760197
 GameObject:
@@ -1643,7 +1640,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454722b4f34d79647824fe000a924562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   text: {fileID: 766760200}
 --- !u!114 &766760200
 MonoBehaviour:
@@ -1987,7 +1983,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013a843337d50df4389c96a3376fae7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   toggle: {fileID: 775783813}
   cols: 0
 --- !u!1 &816599346
@@ -2683,7 +2678,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 1100733366}
-  build: {fileID: 1612503649}
   max: 1
 --- !u!1 &1125611504
 GameObject:
@@ -3020,7 +3014,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 1190219275}
-  build: {fileID: 1612503649}
   max: 0
 --- !u!1 &1200909765
 GameObject:
@@ -3494,7 +3487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 598d9e7c66d808b4986426bde431c8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  build: {fileID: 1612503649}
   text: {fileID: 1289675837}
 --- !u!114 &1289675837
 MonoBehaviour:
