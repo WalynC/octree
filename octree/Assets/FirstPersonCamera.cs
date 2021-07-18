@@ -1,32 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
     public static FirstPersonCamera instance;
     public Vector3 eul;
-    public Transform tgt;
 
     public float sens = 5f; //sensitivity
     public Vector3 offset;
     void Start()
     {
         instance = this;
-        tgt = transform.parent;
-        transform.parent = null;
     }
 
-    public void Load(Vector3 e)
-    {
-        eul = e;
-        transform.eulerAngles = eul;
-    }
-    public void Load(Transform e)
-    {
-        eul = e.eulerAngles;
-        transform.eulerAngles = eul;
-    }
     void Update()
     {
         if (Input.GetMouseButton(1))
