@@ -61,7 +61,7 @@ public class Node
         this.parent = parent;
         this.pos = pos;
         this.size = size;
-        depth = parent != null ? parent.depth + 1 : 0;
+        if (parent != null) depth = parent.depth + 1;
         OctreeBuilder.instance.nodeCount[depth]++;
         collision = Physics.CheckBox(pos, new Vector3(size, size, size) / 2f);
         if (depth < maxDepth-1 && collision) //if we're not at max depth and we have a collision, child nodes are needed
