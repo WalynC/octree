@@ -84,15 +84,15 @@ public class Node
         Vector2 linePos = new Vector2(x, y);
         Vector2 range = new Vector2(z, z + size);
         OctreeBuilder.AddToRange(builder.xy, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xy, linePos + m, range);
+        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xy, linePos += m, range);
         linePos = new Vector2(x, z);
         range = new Vector2(y, y + size);
         OctreeBuilder.AddToRange(builder.xz, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xz, linePos + m, range);
+        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xz, linePos += m, range);
         linePos = new Vector2(y, z);
         range = new Vector2(x, x + size);
         OctreeBuilder.AddToRange(builder.yz, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.yz, linePos + m, range);
+        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.yz, linePos += m, range);
     }
 }
 
