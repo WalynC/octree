@@ -54,13 +54,13 @@ public class Node
     public Vector3 pos; //world position of the cube
     public float size; //size of the cube from one face to the other
     public int depth = 0; //depth in the octree of this node
-    public bool collision;
-    public Node(float size, Vector3 pos, int maxDepth, Node parent = null)
+    public bool collision; //whether a collision has been found in this node or not
+    public Node(float size, Vector3 pos, int maxDepth, Node parent = null, int depth = 0)
     {
         this.parent = parent;
         this.pos = pos;
         this.size = size;
-        if (parent != null) depth = parent.depth + 1;
+        this.depth = depth;
         OctreeBuilder.instance.nodeCount[depth]++;
         collision = Physics.CheckBox(pos, new Vector3(size, size, size) / 2f);
         if (depth < maxDepth-1 && collision) //if we're not at max depth and we have a collision, child nodes are needed
@@ -68,7 +68,7 @@ public class Node
             children = new Node[8];
             for (int i = 0; i < 8; ++i)
             {
-                children[i] = new Node(size / 2f, pos + directions[i] * size / 4f, maxDepth, this);
+                children[i] = new Node(size / 2f, pos + directions[i] * size / 4f, maxDepth, this, depth + 1);
             }
         }
     }
