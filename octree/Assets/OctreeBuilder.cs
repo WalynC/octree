@@ -158,6 +158,7 @@ public class OctreeBuilder : MonoBehaviour
     public void Clear()
     {
         root = null;
+        nodeCount = new int[maxDepth];
         ClearVisuals();
     }
 
