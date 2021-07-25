@@ -2,40 +2,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 
-public class RangeSet
+public class LineSet
 {
-    public List<Vector2> ranges;
+    public List<Vector2> set;
 
-    public RangeSet()
+    public LineSet()
     {
-        ranges = new List<Vector2>();
+        set = new List<Vector2>();
     }
 
-    public void AddRange(Vector2 add)
+    public void Add(Vector2 add)
     {
         List<Vector2> remove = new List<Vector2>();
         bool redundant = false;
-        for (int i = 0; i < ranges.Count; ++i)
+        for (int i = 0; i < set.Count; ++i)
         {
-            bool xOverlap = add.x >= ranges[i].x && add.x <= ranges[i].y; //added range's x value is within the current range
-            bool yOverlap = add.y >= ranges[i].x && add.y <= ranges[i].y; //added range's y value is within the current range
+            bool xOverlap = add.x >= set[i].x && add.x <= set[i].y; //added range's x value is within the current range
+            bool yOverlap = add.y >= set[i].x && add.y <= set[i].y; //added range's y value is within the current range
             if (xOverlap && yOverlap) // the range being added is completely within the current range
             {
                 redundant = true;
                 continue; //if completely overlapped, the added range won't hit anything outside of it, so this addition is finished
             }
-            bool addOverlap = add.x <= ranges[i].x && add.y >= ranges[i].y; //added range completely overlaps the current range
+            bool addOverlap = add.x <= set[i].x && add.y >= set[i].y; //added range completely overlaps the current range
             if (xOverlap || yOverlap || addOverlap) //if there's overlap, update the added range's values accordingly, and set the old range to be removed
             {
-                add.x = Mathf.Min(add.x, ranges[i].x);
-                add.y = Mathf.Max(add.y, ranges[i].y);
-                remove.Add(ranges[i]);
+                add.x = Mathf.Min(add.x, set[i].x);
+                add.y = Mathf.Max(add.y, set[i].y);
+                remove.Add(set[i]);
             }
         }
         if (!redundant)
         {
-            foreach (Vector2 i in remove) ranges.Remove(i);
-            ranges.Add(add);
+            foreach (Vector2 i in remove) set.Remove(i);
+            set.Add(add);
         }
     }
 }
@@ -107,7 +107,7 @@ public class OctreeBuilder : MonoBehaviour
     public int maxDepth;
     public bool showCols, showNonCols;
     Node root;
-    public Dictionary<Vector2, RangeSet> xy, xz, yz;
+    public Dictionary<Vector2, LineSet> xy, xz, yz;
     public float lastOctreeTime, lastLineTime;
     public int[] nodeCount;
 
@@ -115,16 +115,16 @@ public class OctreeBuilder : MonoBehaviour
     Queue<LineRenderer> pool = new Queue<LineRenderer>();
     public Queue<LineRenderer> used = new Queue<LineRenderer>();
 
-    public static void AddToLinePlane(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
+    public static void AddToLinePlane(Dictionary<Vector2, LineSet> dict, Vector2 pos, Vector2 range)
     {
-        RangeSet set;
+        LineSet set;
         dict.TryGetValue(pos, out set);
         if (set == null)
         {
-            set = new RangeSet();
+            set = new LineSet();
             dict.Add(pos, set);
         }
-        set.AddRange(range);
+        set.Add(range);
     }
 
     LineRenderer GetLineRenderer()
@@ -174,9 +174,9 @@ public class OctreeBuilder : MonoBehaviour
             pool.Enqueue(o);
             o.gameObject.SetActive(false);
         }
-        xy = new Dictionary<Vector2, RangeSet>();
-        xz = new Dictionary<Vector2, RangeSet>();
-        yz = new Dictionary<Vector2, RangeSet>();
+        xy = new Dictionary<Vector2, LineSet>();
+        xz = new Dictionary<Vector2, LineSet>();
+        yz = new Dictionary<Vector2, LineSet>();
     }
 
     public void BuildVisuals()
@@ -200,27 +200,27 @@ public class OctreeBuilder : MonoBehaviour
             }
             toSearch = newSearch;
         }
-        foreach (KeyValuePair<Vector2, RangeSet> kv in xy)
+        foreach (KeyValuePair<Vector2, LineSet> kv in xy)
         {
-            foreach (Vector2 v in kv.Value.ranges)
+            foreach (Vector2 v in kv.Value.set)
             {
                 LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(kv.Key.x, kv.Key.y, v.x));
                 rend.SetPosition(1, new Vector3(kv.Key.x, kv.Key.y, v.y));
             }
         }
-        foreach (KeyValuePair<Vector2, RangeSet> kv in xz)
+        foreach (KeyValuePair<Vector2, LineSet> kv in xz)
         {
-            foreach (Vector2 v in kv.Value.ranges)
+            foreach (Vector2 v in kv.Value.set)
             {
                 LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(kv.Key.x, v.x, kv.Key.y));
                 rend.SetPosition(1, new Vector3(kv.Key.x, v.y, kv.Key.y));
             }
         }
-        foreach (KeyValuePair<Vector2, RangeSet> kv in yz)
+        foreach (KeyValuePair<Vector2, LineSet> kv in yz)
         {
-            foreach (Vector2 v in kv.Value.ranges)
+            foreach (Vector2 v in kv.Value.set)
             {
                 LineRenderer rend = GetLineRenderer();
                 rend.SetPosition(0, new Vector3(v.x, kv.Key.x, kv.Key.y));
