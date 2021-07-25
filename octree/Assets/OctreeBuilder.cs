@@ -17,15 +17,15 @@ public class RangeSet
         bool redundant = false;
         for (int i = 0; i < ranges.Count; ++i)
         {
-            bool xOverlap = add.x >= ranges[i].x && add.x <= ranges[i].y;
-            bool yOverlap = add.y >= ranges[i].x && add.y <= ranges[i].y;
-            bool addOverlap = add.x <= ranges[i].x && add.y >= ranges[i].y;
-            if (xOverlap && yOverlap)
+            bool xOverlap = add.x >= ranges[i].x && add.x <= ranges[i].y; //added range's x value is within the current range
+            bool yOverlap = add.y >= ranges[i].x && add.y <= ranges[i].y; //added range's y value is within the current range
+            if (xOverlap && yOverlap) // the range being added is completely within the current range
             {
                 redundant = true;
-                continue;
+                continue; //if completely overlapped, the added range won't hit anything outside of it, so this addition is finished
             }
-            if (xOverlap || yOverlap || addOverlap)
+            bool addOverlap = add.x <= ranges[i].x && add.y >= ranges[i].y; //added range completely overlaps the current range
+            if (xOverlap || yOverlap || addOverlap) //if there's overlap, update the added range's values accordingly, and set the old range to be removed
             {
                 add.x = Mathf.Min(add.x, ranges[i].x);
                 add.y = Mathf.Max(add.y, ranges[i].y);
