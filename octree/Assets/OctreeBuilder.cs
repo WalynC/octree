@@ -14,29 +14,21 @@ public class LineSet
     public void Add(Vector2 add)
     {
         List<Vector2> remove = new List<Vector2>();
-        bool redundant = false;
         for (int i = 0; i < set.Count; ++i)
         {
-            bool xOverlap = add.x >= set[i].x && add.x <= set[i].y; //added range's x value is within the current range
-            bool yOverlap = add.y >= set[i].x && add.y <= set[i].y; //added range's y value is within the current range
-            if (xOverlap && yOverlap) // the range being added is completely within the current range
-            {
-                redundant = true;
-                continue; //if completely overlapped, the added range won't hit anything outside of it, so this addition is finished
-            }
-            bool addOverlap = add.x <= set[i].x && add.y >= set[i].y; //added range completely overlaps the current range
-            if (xOverlap || yOverlap || addOverlap) //if there's overlap, update the added range's values accordingly, and set the old range to be removed
+            bool xOverlap = add.x >= set[i].x && add.x <= set[i].y; //added line's x value is within the current line
+            bool yOverlap = add.y >= set[i].x && add.y <= set[i].y; //added line's y value is within the current line
+            if (xOverlap && yOverlap) return; //the current line completely envelops the new line, and so the new line can be thrown out
+            bool addOverlap = add.x <= set[i].x && add.y >= set[i].y; //added line completely overlaps the current line
+            if (xOverlap || yOverlap || addOverlap) //if there's overlap, update the added line's values accordingly, and set the old line to be removed
             {
                 add.x = Mathf.Min(add.x, set[i].x);
                 add.y = Mathf.Max(add.y, set[i].y);
                 remove.Add(set[i]);
             }
         }
-        if (!redundant)
-        {
-            foreach (Vector2 i in remove) set.Remove(i);
-            set.Add(add);
-        }
+        foreach (Vector2 i in remove) set.Remove(i);
+        set.Add(add);
     }
 }
 
