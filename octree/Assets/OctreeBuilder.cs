@@ -45,9 +45,9 @@ public class Node
     static Vector3[] directions = { new Vector3(1, 1, 1), new Vector3(1, 1, -1), new Vector3(1, -1, 1), new Vector3(1, -1, -1),
                                     new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1)}; //direction child nodes should be in relative to position of parent node
     /*
-     * x:up/down 
-     * y:north/south
-     * z:east/west
+     * x:left/right
+     * y:up/down
+     * z:forward/back
      */
     public Node[] children = new Node[0];
     public Node parent = null;
@@ -75,23 +75,24 @@ public class Node
 
     public void AddLinesToRange()
     {
-        Vector2[] mods = { new Vector2(size, 0), new Vector2(0, size), new Vector2(-size, 0) };
+        Vector2[] mods = { new Vector2(size, 0), new Vector2(0, size), new Vector2(-size, 0) }; //Used for changing the line positions from one end to another
         OctreeBuilder builder = OctreeBuilder.instance;
         float x = pos.x - size / 2f;
         float y = pos.y - size / 2f;
         float z = pos.z - size / 2f;
-        Vector2 linePos = new Vector2(x, y);
-        Vector2 range = new Vector2(z, z + size);
-        OctreeBuilder.AddToRange(builder.xy, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xy, linePos += m, range);
+        Vector2 linePos = new Vector2(x, y); //the position on the 2d plane the line is perpendicular to 
+        Vector2 range = new Vector2(z, z + size); //the length of the line
+        OctreeBuilder.AddToLinePlane(builder.xy, linePos, range); //add the line to the line plane
+        foreach (Vector2 m in mods) OctreeBuilder.AddToLinePlane(builder.xy, linePos += m, range); //modify the line's 2d plane position, and add it
+        //repeat for xz and yz plane
         linePos = new Vector2(x, z);
         range = new Vector2(y, y + size);
-        OctreeBuilder.AddToRange(builder.xz, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.xz, linePos += m, range);
+        OctreeBuilder.AddToLinePlane(builder.xz, linePos, range);
+        foreach (Vector2 m in mods) OctreeBuilder.AddToLinePlane(builder.xz, linePos += m, range);
         linePos = new Vector2(y, z);
         range = new Vector2(x, x + size);
-        OctreeBuilder.AddToRange(builder.yz, linePos, range);
-        foreach (Vector2 m in mods) OctreeBuilder.AddToRange(builder.yz, linePos += m, range);
+        OctreeBuilder.AddToLinePlane(builder.yz, linePos, range);
+        foreach (Vector2 m in mods) OctreeBuilder.AddToLinePlane(builder.yz, linePos += m, range);
     }
 }
 
@@ -111,7 +112,7 @@ public class OctreeBuilder : MonoBehaviour
     Queue<LineRenderer> pool = new Queue<LineRenderer>();
     public Queue<LineRenderer> used = new Queue<LineRenderer>();
 
-    public static void AddToRange(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
+    public static void AddToLinePlane(Dictionary<Vector2, RangeSet> dict, Vector2 pos, Vector2 range)
     {
         RangeSet set;
         dict.TryGetValue(pos, out set);
