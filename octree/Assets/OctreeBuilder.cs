@@ -62,13 +62,16 @@ public class Node
         this.size = size;
         this.depth = depth;
         OctreeBuilder.instance.nodeCount[depth]++;
-        collision = Physics.CheckBox(pos, new Vector3(size, size, size) / 2f);
-        if (depth < maxDepth-1 && collision) //if we're not at max depth and we have a collision, child nodes are needed
+        if (depth < maxDepth - 1) //if not at max depth, check for collisions
         {
-            children = new Node[8];
-            for (int i = 0; i < 8; ++i)
+            collision = Physics.CheckBox(pos, new Vector3(size, size, size) / 2f);
+            if (collision) //if  we have a collision, child nodes are needed
             {
-                children[i] = new Node(size / 2f, pos + directions[i] * size / 4f, maxDepth, this, depth + 1);
+                children = new Node[8];
+                for (int i = 0; i < 8; ++i)
+                {
+                    children[i] = new Node(size / 2f, pos + directions[i] * size / 4f, maxDepth, this, depth + 1);
+                }
             }
         }
     }
